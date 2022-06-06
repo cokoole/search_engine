@@ -6,6 +6,10 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-# Ignored debug file amd .idea
+# Ignored file
 /.idea
 /cmake-build-*
+/resources
+config.json
+requests.json
+answers.json
