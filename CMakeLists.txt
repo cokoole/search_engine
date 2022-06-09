@@ -6,7 +6,16 @@ set(M_S_D ${CMAKE_SOURCE_DIR}/src/)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(search_engine src/main.cpp ${M_I_D}ConverterJSON.h ${M_S_D}ConverterJSON.cpp ${M_I_D}InvertedIndex.h ${M_S_D}InvertedIndex.cpp include/SearchServer.h src/SearchServer.cpp include/RelativeIndex.h)
+add_executable(
+        search_engine
+        src/main.cpp
+        ${M_I_D}ConverterJSON.h
+        ${M_S_D}ConverterJSON.cpp
+        ${M_I_D}InvertedIndex.h
+        ${M_S_D}InvertedIndex.cpp
+        include/SearchServer.h
+        src/SearchServer.cpp
+        include/RelativeIndex.h)
 
 ## nlohmann_json
 
