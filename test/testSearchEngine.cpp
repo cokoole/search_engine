@@ -130,29 +130,12 @@ TEST(TestCaseSearchServer, TestTop5) {
           {0, 0.667},
           {1, 0.667},
           {2, 0.667},
-          {3, 0.667},
-          {4, 0.667},
-          {5, 0.667},
-          {6, 0.667},
-          {8, 0.667},
-          {9, 0.667},
-          {10, 0.667},
-          {11, 0.667},
-          {12, 0.667},
-          {13, 0.667},
-          {15, 0.667},
-          {16, 0.667},
-          {17, 0.667},
-          {18, 0.667},
-          {19, 0.667},
-          {20, 0.667},
-          {21, 0.667}
       }
   };
 
   InvertedIndex idx;
   idx.UpdateDocumentBase(docs);
   SearchServer srv(idx);
-  std::vector<vector<RelativeIndex>> result = srv.search(request, 22);
+  std::vector<vector<RelativeIndex>> result = srv.search(request, 5);
   ASSERT_EQ(result, expected);
 }
