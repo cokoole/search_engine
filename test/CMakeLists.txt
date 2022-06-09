@@ -11,7 +11,8 @@ add_executable(testSearchEngine
         ../include/ConverterJSON.h
         ../src/ConverterJSON.cpp
         ../include/SearchServer.h
-        ../src/SearchServer.cpp ../include/RelativeIndex.h)
+        ../src/SearchServer.cpp
+        ../include/RelativeIndex.h)
 
 include_directories(../include
         ../src
