@@ -10,12 +10,12 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
   return totalFiles;
 }
 
-unsigned int ConverterJSON::GetResponsesLimit() {
+size_t ConverterJSON::GetResponsesLimit() {
   if (!std::filesystem::is_regular_file(pathConfig)) {
-    throw "config not";
+    throw std::invalid_argument("missing config file");
   }
 
-  unsigned int max_responses = 5;
+  size_t max_responses = 5;
 
   nlohmann::json readJSON;
   std::ifstream jsonFile(pathConfig);
@@ -23,7 +23,7 @@ unsigned int ConverterJSON::GetResponsesLimit() {
   jsonFile >> readJSON;
 
   if (readJSON["config"].find("max_responses") != readJSON["config"].end())
-    max_responses = readJSON["config"].find("max_responses").value().get<unsigned int>();
+    max_responses = readJSON["config"].find("max_responses").value().get<size_t>();
 
   return max_responses;
 }
@@ -54,12 +54,8 @@ std::vector<std::string> ConverterJSON::GetVectorString(const std::string& path,
   return totalFiles;
 }
 
-void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> answers) {
+void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>> answers) {
   std::ofstream outFile(pathAnswers);
-
-  if (!outFile.is_open()) {
-    throw "file";
-  }
 
   nlohmann::json recordAnswers;
   std::string id = "0000";
@@ -70,8 +66,8 @@ void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> a
     for (int j = 0; j < i.size(); ++j) {
       recordAnswers["answers"]["request" + id]["result"] = "true";
       recordAnswers["answers"]["request" + id]["relevance"][j] = {
-           {"docid", i[j].first},
-           {"rank", (static_cast<double>(std::round(i[j].second * 1000))) / 1000}
+           {"docid", i[j].doc_id},
+           {"rank", (static_cast<double>(std::round(i[j].rank * 1000))) / 1000}
           };
     }
   }

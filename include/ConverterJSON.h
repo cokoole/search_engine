@@ -4,6 +4,7 @@
 #include <string>
 //
 #include "nlohmann/json.hpp"
+#include "RelativeIndex.h"
 
 // Class to work with JSON
 class ConverterJSON {
@@ -20,7 +21,7 @@ class ConverterJSON {
 * number of responses per request
 * @return
 */
-  unsigned int GetResponsesLimit();
+  size_t GetResponsesLimit();
 /**
 * Method for receiving requests from the requests.json file
 * @return returns a list of requests from the requests.json file
@@ -29,7 +30,7 @@ class ConverterJSON {
 /**
 * Put search results in answers.json file
 */
-  void putAnswers(std::vector<std::vector<std::pair<int, float>>>
+  void putAnswers(std::vector<std::vector<RelativeIndex>>
                   answers);
 
  private:
