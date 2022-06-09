@@ -21,9 +21,9 @@ requests.json
 * @return returns a sorted list of relevant responses for
 * given requests
 */
-  std::vector<std::vector<RelativeIndex>> search(const
-                                                 std::vector<std::string>& queries_input,
-                                                 size_t ResponsesLimit = 5);
+  std::vector<std::vector<RelativeIndex>> search(
+      const std::vector<std::string>& queries_input,
+      size_t ResponsesLimit = 5);
  private:
   InvertedIndex _index;
 };

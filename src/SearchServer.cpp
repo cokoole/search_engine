@@ -34,24 +34,25 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<s
       }
     }
 
+    using pair_type = decltype(absoluteRelevance)::value_type;
+
+    auto max = std::max_element(absoluteRelevance.begin(),
+                                absoluteRelevance.end(),
+                                [] (const pair_type & p1, const pair_type & p2) {
+                                  return p1.second < p2.second;
+                                }
+    );
+
     std::vector<RelativeIndex> relativeRelevance;
 
-    auto maxElement = [](std::map<size_t, size_t> map) {
-      size_t max = 0;
-      for (auto& elem: map) {
-        if (elem.second > max) {
-          max = elem.second;
-        }
-      }
-
-      return max;
-    };
-    auto max = maxElement(absoluteRelevance);
-    relativeRelevance.reserve(absoluteRelevance.size());
-
     for (auto& it: absoluteRelevance) {
-      relativeRelevance.push_back({it.first, (static_cast<float>(std::round(static_cast<float>(it.second) / max * 1000)) / 1000)});
+      relativeRelevance.push_back({
+        it.first,
+        (static_cast<float>(std::round(static_cast<float>(it.second) / max->second * 1000)) / 1000
+        )
+      });
     }
+
     answer.push_back(relativeRelevance);
   }
 
