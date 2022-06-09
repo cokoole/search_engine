@@ -10,6 +10,9 @@
 class ConverterJSON {
  public:
   ConverterJSON() = default;
+  ConverterJSON(std::string pathConfig,
+                std::string pathRequests,
+                std::string pathAnswers);
 /**
 * File content retrieval method
 * @return Returns a list with the contents of the files listed
@@ -21,10 +24,10 @@ class ConverterJSON {
 * number of responses per request
 * @return
 */
-  size_t GetResponsesLimit();
+  size_t GetResponseLimit() const;
 /**
-* Method for receiving requests from the requests.json file
-* @return returns a list of requests from the requests.json file
+* Method for receiving mRequests from the mRequests.json file
+* @return returns a list of mRequests from the mRequests.json file
 */
   std::vector<std::string> GetRequests();
 /**
@@ -33,16 +36,29 @@ class ConverterJSON {
   void putAnswers(std::vector<std::vector<RelativeIndex>>
                   answers);
 
+  // Sets path config file
+  void setPathConfig(std::string path);
+  // Sets path requests file
+  void setPathRequests(std::string path);
+  // Sets path answers file
+  void setPathAnswers(std::string path);
+
  private:
   // File paths
-  const std::string pathConfig = "../config.json";
-  const std::string pathRequests = "../requests.json";
-  const std::string pathAnswers = "../answers.json";
+  std::string mPathConfig;
+  std::string mPathRequests;
+  std::string mPathAnswers;
+
+  std::vector<std::string> mTextDocuments;
+  size_t mResponseLimit = 0;
+  std::vector<std::string> mRequests;
 
   // Increments the string with the id of the file
   static void incrementId(std::string& idFile);
   // Generic method for extracting desired array from file
   static std::vector<std::string> extractingArrayFromFile(const std::string& path, const std::string& find);
+  // Sets response limit from config file
+  void setResponseLimit();
 };
 
 #endif //SEARCH_ENGINE_INCLUDE_CONVERTERJSON_H_
