@@ -1,0 +1,104 @@
+{
+    "answers": {
+        "request0001": {
+            "relevance": [
+                {
+                    "docid": 5,
+                    "rank": 1.0
+                },
+                {
+                    "docid": 6,
+                    "rank": 1.0
+                },
+                {
+                    "docid": 7,
+                    "rank": 0.833
+                },
+                {
+                    "docid": 3,
+                    "rank": 0.667
+                },
+                {
+                    "docid": 0,
+                    "rank": 0.5
+                }
+            ],
+            "result": "true"
+        },
+        "request0002": {
+            "relevance": [
+                {
+                    "docid": 1,
+                    "rank": 1.0
+                },
+                {
+                    "docid": 6,
+                    "rank": 1.0
+                },
+                {
+                    "docid": 7,
+                    "rank": 0.8
+                },
+                {
+                    "docid": 8,
+                    "rank": 0.7
+                },
+                {
+                    "docid": 0,
+                    "rank": 0.6
+                }
+            ],
+            "result": "true"
+        },
+        "request0003": {
+            "relevance": [
+                {
+                    "docid": 4,
+                    "rank": 1.0
+                },
+                {
+                    "docid": 0,
+                    "rank": 0.909
+                },
+                {
+                    "docid": 2,
+                    "rank": 0.727
+                },
+                {
+                    "docid": 6,
+                    "rank": 0.727
+                },
+                {
+                    "docid": 7,
+                    "rank": 0.727
+                }
+            ],
+            "result": "true"
+        },
+        "request0004": {
+            "relevance": [
+                {
+                    "docid": 6,
+                    "rank": 1.0
+                },
+                {
+                    "docid": 8,
+                    "rank": 1.0
+                },
+                {
+                    "docid": 3,
+                    "rank": 0.889
+                },
+                {
+                    "docid": 0,
+                    "rank": 0.778
+                },
+                {
+                    "docid": 1,
+                    "rank": 0.778
+                }
+            ],
+            "result": "true"
+        }
+    }
+}
