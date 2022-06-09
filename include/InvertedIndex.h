@@ -5,7 +5,7 @@
 
 struct Entry {
   size_t doc_id, count;
-// Данный оператор необходим для проведения тестовых сценариев
+// This operator is required for test scenarios
   bool operator ==(const Entry& other) const {
     return (doc_id == other.doc_id &&
         count == other.count);
@@ -16,21 +16,20 @@ class InvertedIndex {
  public:
   InvertedIndex() = default;
 /**
-* Обновить или заполнить базу документов, по которой будем совершать
-поиск
-* @param texts_input содержимое документов
+* Update or fill in the database of documents on which we will search
+* @param input_docs document content
 */
   void UpdateDocumentBase(const std::vector<std::string>& input_docs);
 /**
- * ** Метод определяет количество вхождений слова word в загруженной базе
-документов
-* @param word слово, частоту вхождений которого необходимо определить
-* @return возвращает подготовленный список с частотой слов
+ * ** The method determines the number of occurrences of the word word in
+ * the loaded database documents
+* @param word the word whose occurrence frequency is to be determined
+* @return returns a prepared list with word frequency
 */
   std::vector<Entry> GetWordCount(const std::string& word);
  private:
-  std::vector<std::string> mDocs; // список содержимого документов
-  std::map<std::string, std::vector<Entry>> freq_dictionary; // частотный словарь
+  std::vector<std::string> mDocs; // document content list
+  std::map<std::string, std::vector<Entry>> freq_dictionary; // frequency dictionary
 };
 
 #endif //SEARCH_ENGINE_INCLUDE_INVERTEDINDEX_H_

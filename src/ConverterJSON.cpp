@@ -5,7 +5,7 @@
 #include "ConverterJSON.h"
 
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
-  std::vector<std::string> totalFiles = GetVectorString(pathConfig, "files");
+  std::vector<std::string> totalFiles = extractingArrayFromFile(pathConfig, "files");
 
   return totalFiles;
 }
@@ -29,12 +29,12 @@ size_t ConverterJSON::GetResponsesLimit() {
 }
 
 std::vector<std::string> ConverterJSON::GetRequests() {
-  std::vector<std::string> totalFiles = GetVectorString(pathRequests, "requests");
+  std::vector<std::string> totalFiles = extractingArrayFromFile(pathRequests, "requests");
 
   return totalFiles;
 }
 
-std::vector<std::string> ConverterJSON::GetVectorString(const std::string& path, const std::string& find) {
+std::vector<std::string> ConverterJSON::extractingArrayFromFile(const std::string& path, const std::string& find) {
   if (!std::filesystem::is_regular_file(path)) {
     throw std::invalid_argument("Wrong path: " + path);
   }

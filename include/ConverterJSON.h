@@ -42,7 +42,7 @@ class ConverterJSON {
   // Increments the string with the id of the file
   static void incrementId(std::string& idFile);
   // Generic method for extracting desired array from file
-  static std::vector<std::string> GetVectorString(const std::string& path, const std::string& find);
+  static std::vector<std::string> extractingArrayFromFile(const std::string& path, const std::string& find);
 };
 
 #endif //SEARCH_ENGINE_INCLUDE_CONVERTERJSON_H_

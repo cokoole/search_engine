@@ -9,18 +9,17 @@
 class SearchServer {
  public:
 /**
-* @param idx в конструктор класса передаётся ссылка на класс
-InvertedIndex,
-* чтобы SearchServer мог узнать частоту слов встречаемых в
-запросе
+* @param idx a reference to the class is passed to the class constructor
+* Inverted_Index
+* so that SearchServer can find out the frequency of words found in request
 */
   explicit SearchServer(InvertedIndex& idx) : _index(idx){ };
 /**
-* Метод обработки поисковых запросов
-* @param queries_input поисковые запросы взятые из файла
+* Search query processing method
+* @param queries_input search queries taken from the file
 requests.json
-* @return возвращает отсортированный список релевантных ответов для
-заданных запросов
+* @return returns a sorted list of relevant responses for
+* given requests
 */
   std::vector<std::vector<RelativeIndex>> search(const
                                                  std::vector<std::string>& queries_input,
