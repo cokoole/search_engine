@@ -1,7 +1,11 @@
+#include <fstream>
+//
 #include "gtest/gtest.h"
 #include "InvertedIndex.h"
 #include "SearchServer.h"
 #include "ConverterJSON.h"
+#include "RelativeIndex.h"
+#include "nlohmann/json.hpp"
 
 using namespace std;
 
@@ -138,4 +142,114 @@ TEST(TestCaseSearchServer, TestTop5) {
   SearchServer srv(idx);
   std::vector<vector<RelativeIndex>> result = srv.search(request, 5);
   ASSERT_EQ(result, expected);
+}
+
+TEST(TestCaseConverterJSON, TestConstracParam) {
+  size_t expectedResponses = 7;
+  std::vector<std::string> expectedDocs = {
+      "../resources/file0001.txt",
+      "../resources/file0002.txt",
+      "../resources/file0003.txt",
+      "../resources/file0004.txt",
+      "../resources/file0005.txt",
+      "../resources/file0006.txt",
+      "../resources/file0007.txt",
+      "../resources/file0008.txt",
+      "../resources/file0009.txt"
+  };
+
+  std::vector<std::string> expectedRequests = {
+      "a",
+      "v",
+      "g",
+      "q"
+  };
+
+  ConverterJSON converterJSON("../../test/testConfig.json", "../../test/testRequests.json", "../../test/testAnswers.json");
+
+  ASSERT_EQ(expectedDocs, converterJSON.GetTextDocuments());
+  ASSERT_EQ(expectedRequests, converterJSON.GetRequests());
+  ASSERT_EQ(expectedResponses, converterJSON.GetResponseLimit());
+}
+
+TEST(TestCaseConverterJSON, TestSetsPath) {
+  size_t expectedResponses = 7;
+  std::vector<std::string> expectedDocs = {
+      "../resources/file0001.txt",
+      "../resources/file0002.txt",
+      "../resources/file0003.txt",
+      "../resources/file0004.txt",
+      "../resources/file0005.txt",
+      "../resources/file0006.txt",
+      "../resources/file0007.txt",
+      "../resources/file0008.txt",
+      "../resources/file0009.txt"
+  };
+
+  std::vector<std::string> expectedRequests = {
+      "a",
+      "v",
+      "g",
+      "q"
+  };
+
+  ConverterJSON converterJSON;
+
+  converterJSON.setPathConfig("../../test/testConfig.json");
+  converterJSON.setPathRequests("../../test/testRequests.json");
+
+  ASSERT_EQ(expectedDocs, converterJSON.GetTextDocuments());
+  ASSERT_EQ(expectedRequests, converterJSON.GetRequests());
+  ASSERT_EQ(expectedResponses, converterJSON.GetResponseLimit());
+}
+
+TEST(TestCaseConverterJSON, TestPutAnswer) {
+  ConverterJSON converterJSON;
+
+  const std::vector<vector<RelativeIndex>> answer {
+      {
+          {2, 1},
+          {0, 0.7},
+          {1, 0.3}
+      },
+      {
+      }
+  };
+
+  nlohmann::json expected = {R"({
+    "answers": {
+        "request0001": {
+            "relevance": [
+                {
+                    "docid": 2,
+                    "rank": 1.0
+                },
+                {
+                    "docid": 0,
+                    "rank": 0.7
+                },
+                {
+                    "docid": 1,
+                    "rank": 0.3
+                }
+            ],
+            "result": "true"
+        },
+        "request0002": {
+            "result": "false"
+        }
+      }
+    })"_json
+  };
+
+  converterJSON.setPathAnswers("../../test/testAnswers.json");
+  converterJSON.putAnswers(answer);
+
+  std::ifstream file("../../test/testAnswers.json");
+
+  nlohmann::json result;
+
+  file >> result;
+
+  ASSERT_EQ(expected, result);
 }
