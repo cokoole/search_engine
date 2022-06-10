@@ -10,9 +10,11 @@
 #include "InvertedIndex.h"
 
 void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocsPath) {
+  // Cleaning up old data
   mDocs.clear();
   freq_dictionary.clear();
 
+  // Filling mDocs with new texts
   for (auto& path: inputDocsPath) {
     std::ifstream file(path);
     if (file.is_open()) {
@@ -28,6 +30,7 @@ void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocs
   std::mutex mutexRecord;
   std::vector<std::thread> vectorThread;
 
+  // word indexing in multithreading mode
   for(size_t i = 0; i < mDocs.size(); i++){
     vectorThread.emplace_back([this, i, &mutexRecord](){
       std::stringstream doc;
@@ -41,10 +44,12 @@ void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocs
 
         if(word.empty()) return;
 
+        // Find for Entry by key "word" in a dictionary
         auto entry = std::find_if(freq_dictionary[word].begin(), freq_dictionary[word].end(), [&i](Entry& element){
           return element.doc_id == i;
         });
 
+        // Adding a word or incrementing a counter
         if(entry == freq_dictionary[word].end()){
           mutexRecord.lock();
           freq_dictionary[word].push_back({i, 1});
@@ -67,6 +72,7 @@ std::vector<Entry> InvertedIndex::GetWordCount(const std::string &word) {
     return {};
   }
 
+  // find for words in a dictionary
   if (freq_dictionary.find(word) != freq_dictionary.end()) {
     return freq_dictionary.find(word)->second;
   }

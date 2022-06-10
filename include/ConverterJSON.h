@@ -22,7 +22,6 @@ class ConverterJSON {
 /**
 * The method reads the max_responses field to determine the limit
 * number of responses per request
-* @return
 */
   size_t GetResponseLimit() const;
 /**
@@ -36,19 +35,17 @@ class ConverterJSON {
   void putAnswers(std::vector<std::vector<RelativeIndex>>
                   answers);
 
-  // Sets path config file
   void setPathConfig(std::string path);
-  // Sets path requests file
   void setPathRequests(std::string path);
-  // Sets path answers file
   void setPathAnswers(std::string path);
 
  private:
   // File paths
-  std::string mPathConfig;
-  std::string mPathRequests;
-  std::string mPathAnswers;
+  std::string mPathConfig = "../config.json";
+  std::string mPathRequests = "../requests.json";
+  std::string mPathAnswers = "../answers.json";
 
+  // Contents JSON
   std::vector<std::string> mTextDocuments;
   size_t mResponseLimit = 0;
   std::vector<std::string> mRequests;

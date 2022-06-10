@@ -7,17 +7,33 @@
 int main() {
 
   try {
+    // Creating a ConverterJSON object with a constructor with path parameters to JSON files
     ConverterJSON converter_json("../config.json", "../requests.json", "../answers.json");
+
+    // Creating a InvertedIndex obj
     InvertedIndex inverted_index;
 
-    auto docsPath = converter_json.GetTextDocuments();
-    auto requests = converter_json.GetRequests();
+    /**
+     * ** Database update with
+     * Get.TextDocument() @return filepath from JSON config
+    */
+    inverted_index.UpdateDocumentBase(converter_json.GetTextDocuments());
 
-    inverted_index.UpdateDocumentBase(docsPath);
+    // Creating a SearchServer passing to constructor obj inverted_index
     SearchServer search_server(inverted_index);
 
-    converter_json.putAnswers(search_server.search(requests, converter_json.GetResponseLimit()));
-  } catch (std::invalid_argument &x) {
+    /** @output in JSON response at the specified path
+     * ** Database update with
+     * Get.TextDocument() @return filepath from JSON config
+    */
+    converter_json.putAnswers(
+        search_server.search(
+          converter_json.GetRequests(),
+          converter_json.GetResponseLimit()
+          )
+        );
+
+  } catch (std::invalid_argument &x) { // Exception Handling
     std::cout << x.what() << std::endl;
   }
 

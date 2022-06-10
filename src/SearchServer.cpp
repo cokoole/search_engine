@@ -12,13 +12,16 @@
 std::vector<std::vector<RelativeIndex>> SearchServer::search(
     const std::vector<std::string> &queries_input,
     size_t ResponsesLimit) {
-  std::vector<std::vector<RelativeIndex>> answer;
+  std::vector<std::vector<RelativeIndex>> result;
 
+  // Query Processing
   for (auto& request: queries_input) {
     std::set<std::string> queryWords;
+    // Request buffer for parsing
     std::stringstream ssBuf(request);
     std::unordered_map<size_t, size_t> absoluteRelevance;
 
+    // Parsing word requests
     while (true) {
       std::string buf;
 
@@ -29,10 +32,11 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(
       queryWords.emplace(buf);
     }
 
+    // Filling in the absolute relevance of words
     for (auto& word: queryWords) {
-      auto occurrences = _index.GetWordCount(word);
+      auto entry = _index.GetWordCount(word);
 
-      for (auto& docId: occurrences) {
+      for (auto& docId: entry) {
         if (absoluteRelevance.find(docId.doc_id) != absoluteRelevance.end()) {
           absoluteRelevance[docId.doc_id] += docId.count;
         } else {
@@ -43,6 +47,7 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(
 
     using pair_type = decltype(absoluteRelevance)::value_type;
 
+    // Finding the maximum number of found words in a document
     auto max = std::max_element(absoluteRelevance.begin(),
                                 absoluteRelevance.end(),
                                 [] (const pair_type & p1, const pair_type & p2) {
@@ -52,6 +57,7 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(
 
     std::vector<RelativeIndex> relativeRelevance;
 
+    // Calculating Relative Relevance for Queries
     for (auto& it: absoluteRelevance) {
       relativeRelevance.push_back({
         it.first,
@@ -60,20 +66,22 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(
       });
     }
 
-    answer.push_back(relativeRelevance);
+    result.push_back(relativeRelevance);
   }
 
-  for (auto& i: answer) {
+  // Sort by relevance
+  for (auto& i: result) {
     std::sort(i.begin(), i.end(), [](RelativeIndex &a, RelativeIndex &b){
       return a.rank > b.rank;
     });
   }
 
-  for (auto& it: answer) {
+  // Removing unnecessary requests
+  for (auto& it: result) {
     while (it.size() > ResponsesLimit) {
       it.pop_back();
     }
   }
 
-  return answer;
+  return result;
 }
