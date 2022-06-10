@@ -126,14 +126,14 @@ TEST(TestCaseSearchServer, TestTop5) {
       "../../test/testResources/test030.txt",
   };
 
-  const vector<string> request = {"moscow is the capital of russia"};
+  const vector<string> request = {"moscow is the capital"};
   const std::vector<vector<RelativeIndex>> expected = {
       {
           {7, 1},
           {14, 1},
-          {0, 0.667},
-          {1, 0.667},
-          {2, 0.667},
+          {2, 0.75},
+          {12, 0.75},
+          {11, 0.75},
       }
   };
 
@@ -141,6 +141,7 @@ TEST(TestCaseSearchServer, TestTop5) {
   idx.UpdateDocumentBase(docs);
   SearchServer srv(idx);
   std::vector<vector<RelativeIndex>> result = srv.search(request, 5);
+
   ASSERT_EQ(result, expected);
 }
 
@@ -216,40 +217,16 @@ TEST(TestCaseConverterJSON, TestPutAnswer) {
       }
   };
 
-  nlohmann::json expected = {R"({
-    "answers": {
-        "request0001": {
-            "relevance": [
-                {
-                    "docid": 2,
-                    "rank": 1.0
-                },
-                {
-                    "docid": 0,
-                    "rank": 0.7
-                },
-                {
-                    "docid": 1,
-                    "rank": 0.3
-                }
-            ],
-            "result": "true"
-        },
-        "request0002": {
-            "result": "false"
-        }
-      }
-    })"_json
-  };
+  nlohmann::json expected;
+  std::ifstream fileExp("../../test/testAnswers.json");
+  fileExp >> expected;
 
   converterJSON.setPathAnswers("../../test/testAnswers.json");
   converterJSON.putAnswers(answer);
 
-  std::ifstream file("../../test/testAnswers.json");
-
   nlohmann::json result;
-
-  file >> result;
+  std::ifstream fileRes("../../test/testAnswers.json");
+  fileRes >> result;
 
   ASSERT_EQ(expected, result);
 }
