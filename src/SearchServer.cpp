@@ -5,24 +5,31 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <unordered_map>
 //
 #include "SearchServer.h"
 
-std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<std::string> &queries_input, size_t ResponsesLimit) {
+std::vector<std::vector<RelativeIndex>> SearchServer::search(
+    const std::vector<std::string> &queries_input,
+    size_t ResponsesLimit) {
   std::vector<std::vector<RelativeIndex>> answer;
 
-  for (auto& i: queries_input) {
-    std::set<std::string> queries;
-    std::stringstream ssBuf(i);
-    std::map<size_t, size_t> absoluteRelevance;
+  for (auto& request: queries_input) {
+    std::set<std::string> queryWords;
+    std::stringstream ssBuf(request);
+    std::unordered_map<size_t, size_t> absoluteRelevance;
 
-    while (!ssBuf.eof()) {
+    while (true) {
       std::string buf;
+
       ssBuf >> buf;
-      queries.emplace(buf);
+
+      if (buf.empty()) break;
+
+      queryWords.emplace(buf);
     }
 
-    for (auto& word: queries) {
+    for (auto& word: queryWords) {
       auto occurrences = _index.GetWordCount(word);
 
       for (auto& docId: occurrences) {

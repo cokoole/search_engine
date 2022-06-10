@@ -3,12 +3,16 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <thread>
+#include <algorithm>
+#include <mutex>
 //
 #include "InvertedIndex.h"
 
 void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocsPath) {
   mDocs.clear();
   freq_dictionary.clear();
+
   for (auto& path: inputDocsPath) {
     std::ifstream file(path);
     if (file.is_open()) {
@@ -20,6 +24,41 @@ void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocs
       std::cout << "Path file missing: " << path << std::endl;
     }
   }
+
+  std::mutex mutexRecord;
+  std::vector<std::thread> vectorThread;
+
+  for(size_t i = 0; i < mDocs.size(); i++){
+    vectorThread.emplace_back([this, i, &mutexRecord](){
+      std::stringstream doc;
+
+      doc << mDocs[i];
+
+      while (true){
+        std::string word;
+
+        doc >> word;
+
+        if(word.empty()) return;
+
+        auto entry = std::find_if(freq_dictionary[word].begin(), freq_dictionary[word].end(), [&i](Entry& element){
+          return element.doc_id == i;
+        });
+
+        if(entry == freq_dictionary[word].end()){
+          mutexRecord.lock();
+          freq_dictionary[word].push_back({i, 1});
+          mutexRecord.unlock();
+        } else{
+          mutexRecord.lock();
+          ++entry->count;
+          mutexRecord.unlock();
+        }
+      }
+    });
+  }
+
+  for(auto& thread : vectorThread) thread.join();
 }
 
 std::vector<Entry> InvertedIndex::GetWordCount(const std::string &word) {
@@ -32,27 +71,5 @@ std::vector<Entry> InvertedIndex::GetWordCount(const std::string &word) {
     return freq_dictionary.find(word)->second;
   }
 
-  std::vector<Entry> result;
-
-  size_t i = 0;
-  for (auto& it: mDocs) {
-    std::stringstream doc(it);
-    std::string buf;
-    size_t number = 0;
-
-    while (!doc.eof()) {
-      doc >> buf;
-      if (buf == word)
-        ++number;
-    }
-
-    if (number > 0)
-      result.push_back({i, number});
-
-    ++i;
-  }
-
-  freq_dictionary.emplace(word, result);
-
-  return result;
+  return {};
 }

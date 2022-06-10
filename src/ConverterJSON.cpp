@@ -30,13 +30,8 @@ std::vector<std::string> ConverterJSON::extractingArrayFromFile(const std::strin
   std::ifstream jsonFile(path);
 
   jsonFile >> readJSON;
-  readJSON = readJSON[find];
 
-  std::vector<std::string> totalFiles;
-
-  for (auto & it : readJSON) {
-    totalFiles.push_back(it);
-  }
+  std::vector<std::string> totalFiles = readJSON[find].get<std::vector<std::string>>();
 
   return totalFiles;
 }
@@ -59,7 +54,7 @@ void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>> answers) 
     }
   }
 
-  outFile << recordAnswers.dump(4) << std::endl;
+  outFile << recordAnswers.dump(2) << std::endl;
 
   outFile.close();
 }
