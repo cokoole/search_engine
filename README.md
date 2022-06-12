@@ -9,26 +9,26 @@ to templates:
 1) [Template config.json](https://github.com/cokoole/search_engine/blob/main/config.json).
 2) [Template requests.json](https://github.com/cokoole/search_engine/blob/main/requests.json).
 
-##Technology stack
+## Technology stack
 
-###Needful:
+### Needful:
 
 * C++17
 * CMake 3.21
 * MinGW w64 9.0
 
-###Connected
+### Connected
 These libraries will be downloaded when building the project, connected in Cmake
 
 * Lib [nlohmann/json](https://github.com/nlohmann/json).
 * Lib [GTest](https://github.com/google/googletest).
 
-##Launch of the project
+## Launch of the project
 
 ```
 git clone https://github.com/cokoole/search_engine
 ```
 
-###Project Features
+### Project Features
 
 Normal operation is guaranteed only when using MinGW and g++ compiler
