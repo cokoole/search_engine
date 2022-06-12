@@ -18,7 +18,7 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(
   for (auto& request: queries_input) {
     std::set<std::string> queryWords;
     // Request buffer for parsing
-    std::stringstream ssBuf(request);
+    std::istringstream ssBuf(request);
     std::unordered_map<size_t, size_t> absoluteRelevance;
 
     // Parsing word requests
@@ -72,7 +72,7 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(
   // Sort by relevance
   for (auto& i: result) {
     std::sort(i.begin(), i.end(), [](RelativeIndex &a, RelativeIndex &b){
-      return a.rank > b.rank;
+      return a.rank > b.rank ? true : a.rank == b.rank ? a.doc_id < b.doc_id : false;;
     });
   }
 

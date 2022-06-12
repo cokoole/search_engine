@@ -33,13 +33,10 @@ void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocs
   // word indexing in multithreading mode
   for(size_t i = 0; i < mDocs.size(); i++){
     vectorThread.emplace_back([this, i, &mutexRecord](){
-      std::stringstream doc;
-
-      doc << mDocs[i];
+      std::istringstream doc(mDocs[i]);
 
       while (true){
         std::string word;
-
         doc >> word;
 
         if(word.empty()) return;
