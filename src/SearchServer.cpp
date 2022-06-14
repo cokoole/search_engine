@@ -22,13 +22,8 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(
     std::unordered_map<size_t, size_t> absoluteRelevance;
 
     // Parsing word requests
-    while (true) {
-      std::string buf;
-
-      ssBuf >> buf;
-
-      if (buf.empty()) break;
-
+    std::string buf;
+    while (ssBuf >> buf) {
       queryWords.emplace(buf);
     }
 
