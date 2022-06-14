@@ -67,7 +67,7 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(
   // Sort by relevance
   for (auto& i: result) {
     std::sort(i.begin(), i.end(), [](RelativeIndex &a, RelativeIndex &b){
-      return a.rank > b.rank ? true : a.rank == b.rank ? a.doc_id < b.doc_id : false;;
+      return a.rank > b.rank ? true : a.rank == b.rank ? a.doc_id < b.doc_id : false;
     });
   }
 
