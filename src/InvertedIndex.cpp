@@ -9,7 +9,7 @@
 //
 #include "InvertedIndex.h"
 
-auto InvertedIndex::findEntryDictionary(const std::string& word, size_t doc_id) {
+auto InvertedIndex::findEntryInDictionary(const std::string& word, size_t doc_id) {
   auto entryVector = freq_dictionary.find(word);
   Entry *entry = nullptr;
 
@@ -52,7 +52,7 @@ void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocs
 
       std::string word;
       while (doc >> word){
-        auto entry  = findEntryDictionary(word, i);
+        auto entry  = findEntryInDictionary(word, i);
 
         if (entry != nullptr) {
           std::lock_guard<std::mutex> guard(mutexRecord);

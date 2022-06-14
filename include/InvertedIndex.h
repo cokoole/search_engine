@@ -31,7 +31,7 @@ class InvertedIndex {
   std::vector<std::string> mDocs;
   std::unordered_map<std::string, std::vector<Entry>> freq_dictionary;
 
-  auto findEntryDictionary(const std::string& word, size_t doc_id);
+  auto findEntryInDictionary(const std::string& word, size_t doc_id);
 };
 
 #endif //SEARCH_ENGINE_INCLUDE_INVERTEDINDEX_H_
