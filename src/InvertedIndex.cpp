@@ -9,6 +9,21 @@
 //
 #include "InvertedIndex.h"
 
+auto InvertedIndex::findEntryDictionary(const std::string& word, size_t doc_id) {
+  auto entryVector = freq_dictionary.find(word);
+  Entry *entry = nullptr;
+
+  if (entryVector != freq_dictionary.end())
+    for (Entry& entryFind : entryVector->second) {
+      if (entryFind.doc_id == doc_id) {
+        entry = &entryFind;
+        break;
+      }
+    }
+
+  return entry;
+}
+
 void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocsPath) {
   // Cleaning up old data
   mDocs.clear();
@@ -41,20 +56,15 @@ void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocs
 
         if(word.empty()) return;
 
-        // Find for Entry by key "word" in a dictionary
-        auto entry = std::find_if(freq_dictionary[word].begin(), freq_dictionary[word].end(), [&i](Entry& element){
-          return element.doc_id == i;
-        });
 
-        // Adding a word or incrementing a counter
-        if(entry == freq_dictionary[word].end()){
-          mutexRecord.lock();
-          freq_dictionary[word].push_back({i, 1});
-          mutexRecord.unlock();
-        } else{
-          mutexRecord.lock();
+        auto entry  = findEntryDictionary(word, i);
+
+        if (entry != nullptr) {
+          std::lock_guard<std::mutex> guard(mutexRecord);
           ++entry->count;
-          mutexRecord.unlock();
+        } else {
+          std::lock_guard<std::mutex> guard(mutexRecord);
+          freq_dictionary[word].push_back({i, 1});
         }
       }
     });
