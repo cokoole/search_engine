@@ -28,7 +28,3 @@ These libraries will be downloaded when building the project, connected in Cmake
 ```
 git clone https://github.com/cokoole/search_engine
 ```
-
-### Project Features
-
-Normal operation is guaranteed only when using MinGW and g++ compiler
