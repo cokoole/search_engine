@@ -50,13 +50,8 @@ void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocs
     vectorThread.emplace_back([this, i, &mutexRecord](){
       std::istringstream doc(mDocs[i]);
 
-      while (true){
-        std::string word;
-        doc >> word;
-
-        if(word.empty()) return;
-
-
+      std::string word;
+      while (doc >> word){
         auto entry  = findEntryDictionary(word, i);
 
         if (entry != nullptr) {
