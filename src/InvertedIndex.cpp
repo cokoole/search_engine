@@ -11,12 +11,13 @@
 
 auto InvertedIndex::findEntryInDictionary(const std::string& word, size_t doc_id) {
   auto entryVector = freq_dictionary.find(word);
-  Entry *entry = nullptr;
+  std::pair<Entry*, bool> entry = {{}, false};
 
   if (entryVector != freq_dictionary.end())
     for (Entry& entryFind : entryVector->second) {
       if (entryFind.doc_id == doc_id) {
-        entry = &entryFind;
+        entry.first = &entryFind;
+        entry.second = true;
         break;
       }
     }
@@ -52,13 +53,12 @@ void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocs
 
       std::string word;
       while (doc >> word){
+        std::lock_guard<std::mutex> guard(mutexRecord);
         auto entry  = findEntryInDictionary(word, i);
 
-        if (entry != nullptr) {
-          std::lock_guard<std::mutex> guard(mutexRecord);
-          ++entry->count;
+        if (entry.second) {
+          ++entry.first->count;
         } else {
-          std::lock_guard<std::mutex> guard(mutexRecord);
           freq_dictionary[word].push_back({i, 1});
         }
       }
